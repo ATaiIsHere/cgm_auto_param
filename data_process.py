@@ -97,9 +97,11 @@ def find_steady(data):
     return x[len(medians)-1]
 
 
-
-
-    pass
+def linear_regression(x, y):
+    x, y = np.array(x), np.array(y)
+    a = ((x - x.mean()) * (y - y.mean())).sum() / ((x - x.mean()) * (x - x.mean())).sum()
+    b = y.mean() - a * x.mean()
+    return a, b
 
 
 def compute_MARD(x, y, a, b):
@@ -108,4 +110,3 @@ def compute_MARD(x, y, a, b):
 
 def compute_MSE(x, y, a, b):
     return np.square(y - currents_to_glucose(x, a, b)).mean()
-

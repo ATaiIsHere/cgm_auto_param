@@ -1,5 +1,6 @@
 import pandas as pd
 import os
+import re
 from data_process import currents_to_glucose, load_cgm_data, compute_MARD, compute_MSE
 import numpy as np
 import matplotlib.pyplot as plt
@@ -13,7 +14,7 @@ def load_data_info(data_info_file, data_dir):
 
 
 def get_data_filename(data_dir):
-    cgm_data_file = data_dir + '/' + list(filter(lambda f: '_T' in f, os.listdir(data_dir)))[0]
+    cgm_data_file = data_dir + '/' + list(filter(lambda f: re.match(r'.*_[A-Z]', f) is not None, os.listdir(data_dir)))[0]
     bgm_data_file = data_dir + '/' + list(filter(lambda f: f.startswith('bgm'), os.listdir(data_dir)))[0]
 
     return cgm_data_file, bgm_data_file

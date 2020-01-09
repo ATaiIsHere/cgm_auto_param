@@ -1,4 +1,5 @@
 import matplotlib
+import numpy as np
 matplotlib.use('TkAgg')
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
@@ -25,13 +26,13 @@ class PlotGUI(ttk.Frame):
         self.entry_ymin['width'] = 5
         self.entry_ymin.grid(row=8, column=0)
 
-        self.entry_xmax = ttk.Entry(self)
-        self.entry_xmax['width'] = 5
-        self.entry_xmax.grid(row=9, column=8)
-
         self.entry_xmin = ttk.Entry(self)
         self.entry_xmin['width'] = 5
         self.entry_xmin.grid(row=9, column=1)
+
+        self.entry_xmax = ttk.Entry(self)
+        self.entry_xmax['width'] = 5
+        self.entry_xmax.grid(row=9, column=8)
 
         # self.button = ttk.Button(self)
         # self.button["text"] = "data1!"
@@ -52,6 +53,11 @@ class PlotGUI(ttk.Frame):
         self.button["text"] = "pop!"
         self.button["command"] = self.pop_data
         self.button.grid(row=5, column=0)
+
+        self.button = ttk.Button(self)
+        self.button["text"] = "clear"
+        self.button["command"] = self.clear_data
+        self.button.grid(row=6, column=0)
 
         self.reset_limit()
 
@@ -78,7 +84,20 @@ class PlotGUI(ttk.Frame):
         if y:
             self.f_plot.axhline(y, color=color, linewidth=linewidth)
 
+    def plot_line_by_param(self, a, b, maximum=1000, minimum=-1000, color='r'):
+        x = np.array([minimum, maximum])
+        y = a * x + b
+        self.push_data(x, y)
+
     def push_data(self, x, y, marker='-'):
+        self.f_plot.grid(ls='--')
+        self.f_plot.plot(x, y, marker)
+        self.canvs.draw()
+
+    def push_points(self, points, marker='o'):
+        x = list(map(lambda p: p['x'], points))
+        y = list(map(lambda p: p['y'], points))
+        self.f_plot.grid(ls='--')
         self.f_plot.plot(x, y, marker)
         self.canvs.draw()
 
